@@ -7,7 +7,7 @@
     <title>Prince of Persia: Warrior Within — Island of Time</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;700;900&family=Outfit:wght@300;400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         /* ===================================================================
@@ -59,42 +59,69 @@
         =================================================================== */
         .rv {
             opacity: 0;
-            transform: translateY(70px);
-            transition: opacity 1s cubic-bezier(0.16,1,0.3,1),
-                        transform 1s cubic-bezier(0.16,1,0.3,1);
+            transform: translateY(60px);
+            transition: opacity 1.2s cubic-bezier(0.16,1,0.3,1),
+                        transform 1.2s cubic-bezier(0.16,1,0.3,1),
+                        filter 1.4s ease;
+            filter: blur(4px);
         }
-        .rv.vis { opacity:1; transform:translateY(0); }
-        .rv-d1 { transition-delay: 0.12s; }
-        .rv-d2 { transition-delay: 0.24s; }
-        .rv-d3 { transition-delay: 0.36s; }
-        .rv-d4 { transition-delay: 0.48s; }
+        .rv.vis { opacity:1; transform:translateY(0); filter:blur(0); }
+        .rv-d1 { transition-delay: 0.15s; }
+        .rv-d2 { transition-delay: 0.3s; }
+        .rv-d3 { transition-delay: 0.45s; }
+        .rv-d4 { transition-delay: 0.6s; }
+        .rv-d5 { transition-delay: 0.75s; }
 
         /* Slide from left */
         .rv-left {
             opacity: 0;
-            transform: translateX(-80px);
-            transition: opacity 1s cubic-bezier(0.16,1,0.3,1),
-                        transform 1s cubic-bezier(0.16,1,0.3,1);
+            transform: translateX(-90px);
+            transition: opacity 1.2s cubic-bezier(0.16,1,0.3,1),
+                        transform 1.2s cubic-bezier(0.16,1,0.3,1),
+                        filter 1.4s ease;
+            filter: blur(3px);
         }
-        .rv-left.vis { opacity:1; transform:translateX(0); }
+        .rv-left.vis { opacity:1; transform:translateX(0); filter:blur(0); }
 
         /* Slide from right */
         .rv-right {
             opacity: 0;
-            transform: translateX(80px);
-            transition: opacity 1s cubic-bezier(0.16,1,0.3,1),
-                        transform 1s cubic-bezier(0.16,1,0.3,1);
+            transform: translateX(90px);
+            transition: opacity 1.2s cubic-bezier(0.16,1,0.3,1),
+                        transform 1.2s cubic-bezier(0.16,1,0.3,1),
+                        filter 1.4s ease;
+            filter: blur(3px);
         }
-        .rv-right.vis { opacity:1; transform:translateX(0); }
+        .rv-right.vis { opacity:1; transform:translateX(0); filter:blur(0); }
 
         /* Scale up */
         .rv-scale {
             opacity: 0;
-            transform: scale(0.85);
-            transition: opacity 1s cubic-bezier(0.16,1,0.3,1),
-                        transform 1s cubic-bezier(0.16,1,0.3,1);
+            transform: scale(0.88);
+            transition: opacity 1.2s cubic-bezier(0.16,1,0.3,1),
+                        transform 1.2s cubic-bezier(0.16,1,0.3,1),
+                        filter 1.4s ease;
+            filter: blur(3px);
         }
-        .rv-scale.vis { opacity:1; transform:scale(1); }
+        .rv-scale.vis { opacity:1; transform:scale(1); filter:blur(0); }
+
+        /* Clip reveal (image wipe) */
+        .rv-clip {
+            opacity: 0;
+            clip-path: inset(10% 10% 10% 10%);
+            transition: opacity 1.4s cubic-bezier(0.16,1,0.3,1),
+                        clip-path 1.4s cubic-bezier(0.16,1,0.3,1);
+        }
+        .rv-clip.vis { opacity:1; clip-path: inset(0% 0% 0% 0%); }
+
+        /* Fade rotate in */
+        .rv-tilt {
+            opacity: 0;
+            transform: translateY(40px) rotate(2deg);
+            transition: opacity 1.2s cubic-bezier(0.16,1,0.3,1),
+                        transform 1.2s cubic-bezier(0.16,1,0.3,1);
+        }
+        .rv-tilt.vis { opacity:1; transform:translateY(0) rotate(0deg); }
 
         /* ===================================================================
            NAVIGATION (FLEXBOX)
@@ -128,36 +155,164 @@
             gap: 14px;
         }
 
-        .logo-img {
+        .logo-img, .logo-video {
             height: 46px;
-            width: auto;
-            filter: drop-shadow(0 0 12px rgba(192,57,43,0.5)) brightness(1.1);
+            width: 46px;
             border-radius: 4px;
             transition: filter 0.3s ease;
+            object-fit: cover;
         }
 
-        .logo:hover .logo-img {
-            filter: drop-shadow(0 0 20px rgba(231,76,60,0.7)) brightness(1.3);
+        .logo:hover .logo-img, .logo:hover .logo-video {
+            filter: brightness(1.2);
         }
 
-        .logo-text { display: flex; flex-direction: column; }
+        .logo-text-ww {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            margin-left: 4px;
+        }
 
-        .logo-main {
+        .pop-sub {
             font-family: var(--font-heading);
-            font-size: 1.15rem;
-            font-weight: 900;
-            color: var(--crimson-glow);
-            letter-spacing: 2px;
-            line-height: 1.1;
-            text-shadow: 0 0 20px rgba(192,57,43,0.3);
-        }
-
-        .logo-sub {
             font-size: 0.58rem;
-            letter-spacing: 5px;
+            letter-spacing: 3.5px;
             text-transform: uppercase;
             color: var(--text-dim);
-            font-weight: 300;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+        }
+
+        .pop-sub-letter-p {
+            position: relative;
+            display: inline-block;
+            font-size: 1.25em;
+            color: var(--text);
+            margin-right: 0.5px;
+        }
+
+        .pop-sub-letter-p::after {
+            content: '';
+            position: absolute;
+            left: 2px;
+            bottom: -3px;
+            width: 1.5px;
+            height: 5px;
+            background: currentColor;
+            clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+        }
+
+        .pop-main {
+            display: flex;
+            gap: 8px;
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.5px;
+            filter: drop-shadow(1px 2px 3px rgba(0,0,0,0.85));
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover .pop-main {
+            filter: drop-shadow(0 0 10px rgba(231,76,60,0.5)) drop-shadow(1px 2px 3px rgba(0,0,0,0.9));
+        }
+
+        .pop-word {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .pop-letter {
+            display: inline-block;
+            position: relative;
+            background: linear-gradient(to bottom, #ffffff 48%, #aaaaaa 52%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: background 0.3s ease;
+        }
+
+        .logo:hover .pop-letter {
+            background: linear-gradient(to bottom, var(--gold-bright) 48%, var(--crimson-glow) 52%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .pop-letter.pop-w {
+            font-size: 1.28em;
+            margin-top: -0.08em;
+            margin-right: -1px;
+            -webkit-text-fill-color: #ffffff;
+            background: none;
+        }
+
+        .logo:hover .pop-letter.pop-w {
+            -webkit-text-fill-color: var(--gold-bright);
+            background: none;
+        }
+
+        .pop-letter.pop-w::after {
+            content: '';
+            position: absolute;
+            left: 2px;
+            bottom: -7px;
+            width: 2.2px;
+            height: 9px;
+            background: currentColor;
+            clip-path: polygon(0% 0%, 100% 0%, 50% 100%, 0% 75%);
+        }
+
+        .pop-letter.pop-r-end {
+            font-size: 1.2em;
+            margin-top: -0.05em;
+            -webkit-text-fill-color: #ffffff;
+            background: none;
+        }
+
+        .logo:hover .pop-letter.pop-r-end {
+            -webkit-text-fill-color: var(--gold-bright);
+            background: none;
+        }
+
+        .pop-letter.pop-r-end::after {
+            content: '';
+            position: absolute;
+            left: 3px;
+            bottom: -9px;
+            width: 8px;
+            height: 10px;
+            border-left: 2.2px solid currentColor;
+            border-bottom: 2.2px solid currentColor;
+            border-bottom-left-radius: 8px;
+            transform: skewX(-15deg);
+        }
+
+        .pop-letter.pop-n-end {
+            font-size: 1.15em;
+            margin-top: -0.03em;
+            -webkit-text-fill-color: #ffffff;
+            background: none;
+        }
+
+        .logo:hover .pop-letter.pop-n-end {
+            -webkit-text-fill-color: var(--gold-bright);
+            background: none;
+        }
+
+        .pop-letter.pop-n-end::after {
+            content: '';
+            position: absolute;
+            right: 1px;
+            bottom: -6px;
+            width: 2px;
+            height: 8px;
+            background: currentColor;
+            clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
         }
 
         .nav-links { display: flex; gap: 4px; list-style: none; }
@@ -192,15 +347,14 @@
         .hamburger span { width:24px; height:2px; background:var(--crimson-glow); transition:all 0.3s ease; border-radius:2px; }
 
         /* ===================================================================
-           HERO — FULL SCREEN CINEMATIC (corridor gameplay as BG)
+           HERO — SPLIT LAYOUT (Text LEFT, Character RIGHT blending in)
         =================================================================== */
         .hero {
             position: relative;
             height: 100vh;
-            min-height: 650px;
+            min-height: 700px;
             display: flex;
             align-items: center;
-            justify-content: center;
             overflow: hidden;
         }
 
@@ -212,99 +366,180 @@
             width:100%; height:100%;
             object-fit: cover;
             object-position: center 30%;
-            animation: heroKen 30s ease-in-out infinite alternate;
-            filter: brightness(0.55) contrast(1.15);
+            filter: brightness(0.35) contrast(1.15) saturate(0.8);
+            animation: heroKen 35s ease-in-out infinite alternate;
         }
 
         @keyframes heroKen {
             0% { transform: scale(1.0); }
-            100% { transform: scale(1.15); }
+            100% { transform: scale(1.08); }
         }
 
         .hero-overlay {
             position:absolute; inset:0; z-index:2;
             background:
-                linear-gradient(to top, var(--dark) 0%, rgba(5,3,1,0.4) 30%, transparent 55%, rgba(5,3,1,0.5) 100%),
-                radial-gradient(ellipse at center, transparent 30%, var(--dark) 100%);
+                linear-gradient(to top, var(--dark) 0%, rgba(5,3,1,0.2) 25%, transparent 60%, rgba(5,3,1,0.7) 100%),
+                linear-gradient(to right, var(--dark) 0%, rgba(5,3,1,0.82) 35%, rgba(5,3,1,0.2) 70%, transparent 100%);
         }
 
-        /* Blood vignette effect */
         .hero-overlay::after {
             content: '';
             position: absolute; inset: 0;
-            background: radial-gradient(ellipse at center top, rgba(139,0,0,0.15) 0%, transparent 60%);
+            background: radial-gradient(ellipse at 70% 40%, rgba(139,0,0,0.08) 0%, transparent 50%);
             pointer-events: none;
         }
 
-        .hero-content {
-            position: relative; z-index: 3;
-            text-align: center;
-            max-width: 800px;
-            padding: 0 30px;
+        /* Character image container spanning full width for seamless mask */
+        .hero-character {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
         }
 
-        .hero-logo-img {
-            width: 120px;
-            height: auto;
-            margin: 0 auto 30px;
-            filter: drop-shadow(0 0 30px rgba(192,57,43,0.6));
+        .hero-character img {
+            position: absolute;
+            right: -2%;
+            bottom: 0;
+            top: 0;
+            width: 55%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 15%;
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.15) 12%, #000 48%);
+            mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.15) 12%, #000 48%);
+        }
+
+        /* Gradient mask to blend character into dark bg */
+        .hero-character::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to top, var(--dark) 0%, transparent 20%),
+                linear-gradient(to bottom, var(--dark) 0%, transparent 20%);
+            z-index: 2;
+        }
+
+        /* Subtle red glow behind character */
+        .hero-character::after {
+            content: '';
+            position: absolute;
+            top: 20%;
+            right: 15%;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(139,0,0,0.1) 0%, transparent 60%);
+            z-index: 1;
+            animation: charGlow 5s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes charGlow {
+            0%,100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Text on the left */
+        .hero-content {
+            position: relative; z-index: 5;
+            text-align: left;
+            max-width: 600px;
+            padding: 0 0 0 clamp(30px, 6vw, 100px);
+        }
+
+        .hero-eyebrow {
+            font-family: var(--font-heading);
+            font-size: 0.65rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--crimson-glow);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            width: 35px;
+            height: 1.5px;
+            background: linear-gradient(to right, var(--crimson-glow), transparent);
+        }
+
+        .hero-logo-img, .hero-logo-video {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 20px rgba(192,57,43,0.5));
             animation: logoPulse 4s ease-in-out infinite;
+            object-fit: cover;
+            border-radius: 6px;
         }
 
         @keyframes logoPulse {
-            0%, 100% { filter: drop-shadow(0 0 20px rgba(192,57,43,0.4)); transform: scale(1); }
-            50% { filter: drop-shadow(0 0 40px rgba(231,76,60,0.7)); transform: scale(1.05); }
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(192,57,43,0.4)); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 30px rgba(231,76,60,0.6)); transform: scale(1.03); }
         }
 
-        .hero-title {
-            font-family: var(--font-display);
-            font-size: clamp(2.5rem, 7vw, 5.5rem);
-            font-weight: 900;
-            line-height: 1.0;
-            margin-bottom: 10px;
-        }
-
-        .hero-title .line1 {
-            display: block;
-            font-size: 0.35em;
+        .hero-lore-eyebrow {
             font-family: var(--font-heading);
-            font-weight: 700;
-            letter-spacing: 8px;
+            font-size: 0.72rem;
+            letter-spacing: 5px;
             text-transform: uppercase;
-            color: var(--text-dim);
+            color: var(--crimson-glow);
             margin-bottom: 10px;
         }
 
-        .hero-title .line2 {
-            background: linear-gradient(135deg, #fff 0%, var(--crimson-glow) 40%, var(--blood) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: none;
+        .hero-lore-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4.2vw, 3rem);
+            font-weight: 900;
+            line-height: 1.1;
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            letter-spacing: 0.5px;
+        }
+
+        .hero-lore-story {
+            max-width: 480px;
+            font-size: 0.95rem;
+            line-height: 1.85;
+            color: var(--text-dim);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+        }
+
+        .lore-p {
+            margin-bottom: 14px;
+        }
+
+        .lore-p strong {
+            color: #ffffff;
         }
 
         .hero-desc {
-            font-size: 1rem;
+            font-size: 0.92rem;
             color: var(--text-dim);
-            max-width: 480px;
-            margin: 20px auto 35px;
+            max-width: 420px;
+            margin: 0 0 30px 0;
             font-weight: 300;
             line-height: 1.9;
         }
 
-        .hero-actions { display:flex; gap:15px; justify-content:center; flex-wrap:wrap; }
+        .hero-actions { display:flex; gap:15px; flex-wrap:wrap; }
 
         .btn-blood {
             display:inline-flex; align-items:center; gap:10px;
-            padding: 16px 40px;
+            padding: 15px 35px;
             background: linear-gradient(135deg, var(--crimson), var(--blood));
             color: #fff;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             letter-spacing: 3px;
             text-transform: uppercase;
             border: none;
-            border-radius: 4px;
+            border-radius: 3px;
             transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
             box-shadow: 0 8px 30px rgba(139,0,0,0.4);
         }
@@ -316,15 +551,15 @@
 
         .btn-ghost {
             display:inline-flex; align-items:center; gap:10px;
-            padding: 16px 40px;
+            padding: 15px 35px;
             background: transparent;
             color: var(--text);
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             letter-spacing: 3px;
             text-transform: uppercase;
-            border: 1px solid rgba(192,57,43,0.3);
-            border-radius: 4px;
+            border: 1px solid rgba(192,57,43,0.25);
+            border-radius: 3px;
             transition: all 0.3s ease;
         }
 
@@ -334,7 +569,6 @@
             color: var(--crimson-glow);
         }
 
-        /* Scroll Indicator */
         .scroll-cta {
             position:absolute; bottom:30px; left:50%;
             transform:translateX(-50%);
@@ -355,6 +589,19 @@
         @keyframes scrollFloat {
             0%,100% { transform:translateX(-50%) translateY(0); opacity:1; }
             50% { transform:translateX(-50%) translateY(12px); opacity:0.4; }
+        }
+
+        @media(max-width:900px) {
+            .hero-character img { width: 65%; right: -10%; }
+            .hero-content { padding-left: 25px; }
+        }
+        @media(max-width:650px) {
+            .hero-character img { width: 100%; right: -20%; }
+            .hero-character { opacity: 0.3; }
+            .hero-content { padding: 0 20px; text-align: center; }
+            .hero-actions { justify-content: center; }
+            .hero-eyebrow { justify-content: center; }
+            .hero-eyebrow::before { display: none; }
         }
 
         /* ===================================================================
@@ -412,7 +659,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.8) contrast(1.1);
+            filter: brightness(0.9) contrast(1.1);
             transition: transform 0.8s ease;
         }
 
@@ -448,6 +695,134 @@
         }
 
         /* ===================================================================
+           KAILEENA — Full-bleed split (Empress of Time art)
+        =================================================================== */
+        .kaileena-section {
+            position: relative; z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 85vh;
+            overflow: hidden;
+        }
+
+        .kai-img-wrap {
+            position: relative; overflow: hidden;
+        }
+
+        .kai-img-wrap img {
+            width: 100%; height: 100%;
+            object-fit: cover; object-position: center 20%;
+            filter: brightness(0.95) contrast(1.05);
+            transition: transform 1s ease;
+        }
+
+        .kaileena-section:hover .kai-img-wrap img { transform: scale(1.04); }
+
+        .kai-img-wrap::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to right, transparent 55%, var(--dark) 100%);
+        }
+
+        .kai-text {
+            display: flex; flex-direction: column; justify-content: center;
+            padding: 60px 50px; background: var(--dark);
+        }
+
+        .kai-text p { color: var(--text-dim); font-size: 1rem; line-height: 1.9; margin-bottom: 12px; max-width: 440px; }
+        .kai-text p strong { color: var(--crimson-glow); }
+
+        .kai-tag {
+            display: inline-block; width: fit-content;
+            font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--crimson-glow);
+            border: 1px solid rgba(192,57,43,0.2);
+            padding: 4px 10px; border-radius: 2px; margin-bottom: 10px;
+        }
+
+        /* ===================================================================
+           PRINCE ACTION — Full-bleed with floating accent image
+        =================================================================== */
+        .prince-action {
+            position: relative; z-index: 1;
+            min-height: 80vh;
+            overflow: hidden; display: flex; align-items: center;
+        }
+
+        .prince-action-bg {
+            position: absolute; inset: 0;
+        }
+
+        .prince-action-bg img {
+            width: 100%; height: 100%;
+            object-fit: cover; object-position: center 25%;
+            filter: brightness(0.65) contrast(1.1) saturate(0.95);
+        }
+
+        .prince-action-ov {
+            position: absolute; inset: 0;
+            background:
+                linear-gradient(to bottom, var(--dark) 0%, transparent 18%, transparent 80%, var(--dark) 100%),
+                linear-gradient(to right, rgba(5,3,1,0.7) 0%, transparent 40%);
+        }
+
+        .prince-action-content {
+            position: relative; z-index: 2;
+            max-width: 400px; padding: 0 0 0 clamp(30px,6vw,100px);
+        }
+
+        /* Floating accent image */
+        .accent-float {
+            position: absolute;
+            right: 8%; bottom: 10%;
+            width: 200px; border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid rgba(139,0,0,0.2);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.8);
+            z-index: 3;
+            transition: all 0.5s ease;
+        }
+
+        .accent-float:hover { transform: scale(1.05) translateY(-5px); border-color: rgba(192,57,43,0.3); }
+        .accent-float img { width: 100%; height: auto; display: block; }
+
+        /* ===================================================================
+           PANORAMIC STRIP — Fortress wide shot
+        =================================================================== */
+        .pano-strip {
+            position: relative; z-index: 1; overflow: hidden;
+        }
+
+        .pano-strip img {
+            width: 100%; height: 350px;
+            object-fit: cover; object-position: center;
+            filter: brightness(0.55) contrast(1.15);
+            display: block;
+        }
+
+        .pano-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, var(--dark), transparent 25%, transparent 75%, var(--dark)),
+                        linear-gradient(to right, rgba(5,3,1,0.6), transparent 40%);
+            display: flex; align-items: center; padding: 0 clamp(30px,6vw,100px);
+        }
+
+        .pano-text { max-width: 350px; }
+        .pano-text h3 {
+            font-family: var(--font-display); font-size: 1.5rem;
+            color: var(--gold); margin-bottom: 6px;
+        }
+        .pano-text p { color: var(--text-dim); font-size: 0.85rem; line-height: 1.7; }
+
+        @media (max-width:768px) {
+            .kaileena-section { grid-template-columns: 1fr; }
+            .kai-img-wrap { height: 400px; }
+            .kai-img-wrap::after { background: linear-gradient(to bottom, transparent 60%, var(--dark)); }
+            .kai-text { padding: 30px 20px; }
+            .prince-action-content { padding-left: 20px; }
+            .accent-float { width: 140px; right: 15px; bottom: 15px; }
+        }
+
+        /* ===================================================================
            DAHAKA CINEMATIC SECTION — Full-width parallax
         =================================================================== */
         .dahaka-section {
@@ -469,7 +844,7 @@
             width: 100%; height: 100%;
             object-fit: cover;
             object-position: center 30%;
-            filter: brightness(0.5) contrast(1.3) saturate(1.2);
+            filter: brightness(0.65) contrast(1.2) saturate(1.1);
         }
 
         .dahaka-overlay {
@@ -517,7 +892,7 @@
             height: 300px;
             object-fit: cover;
             object-position: center 40%;
-            filter: brightness(0.5) contrast(1.2);
+            filter: brightness(0.65) contrast(1.15);
             display: block;
         }
 
@@ -937,7 +1312,12 @@
             background:rgba(0,0,0,0.6);
         }
 
-        .footer-logo { font-family:var(--font-heading); font-size:1.2rem; color:var(--crimson-glow); margin-bottom:8px; }
+        .footer-logo-custom {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 18px;
+        }
         .footer-text { color:var(--text-dim); font-size:0.78rem; letter-spacing:1px; }
         .footer-tech { margin-top:12px; font-size:0.7rem; color:rgba(240,224,204,0.25); }
         .footer-tech strong { color:rgba(240,224,204,0.4); }
@@ -979,9 +1359,58 @@
         @media (max-width:480px) {
             .gal-grid { grid-template-columns:1fr 1fr; }
         }
+
+        /* ===================================================================
+           PRELOADER
+        =================================================================== */
+        .preloader {
+            position: fixed;
+            inset: 0;
+            background: #050301;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+                        visibility 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .preloader.loaded {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .preloader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .preloader-video {
+            width: clamp(280px, 45vw, 420px);
+            height: clamp(280px, 45vw, 420px);
+            object-fit: cover;
+            border-radius: 50%;
+            transition: transform 0.5s ease;
+        }
     </style>
 </head>
 <body>
+
+    <!-- ================================================================
+       PRELOADER / INTRO SCREEN
+    ================================================================ -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-content">
+            <video class="preloader-video" autoplay loop muted playsinline>
+                <source src="prince of persia warrior within loading clip 1.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
 
     <!-- Three.js Canvas -->
     <canvas id="three-canvas"></canvas>
@@ -1009,16 +1438,39 @@
     <header class="site-header" id="sh">
         <div class="nav-inner">
             <a href="#" class="logo">
-                <img class="logo-img" src="Prince of Persia WW Logo.jpg" alt="Warrior Within Symbol" />
-                <div class="logo-text">
-                    <span class="logo-main">Warrior Within</span>
-                    <span class="logo-sub">Prince of Persia</span>
+                <video class="logo-video" autoplay loop muted playsinline>
+                    <source src="prince of persia warrior within loading clip 1.mp4" type="video/mp4">
+                </video>
+                <div class="logo-text-ww">
+                    <div class="pop-sub">
+                        <span class="pop-sub-letter-p">P</span>rince <span style="margin: 0 2px; text-transform: lowercase; font-style: italic; font-size: 0.85em; opacity: 0.85;">of</span> <span class="pop-sub-letter-p">P</span>ersia
+                    </div>
+                    <div class="pop-main">
+                        <div class="pop-word">
+                            <span class="pop-letter pop-w">W</span>
+                            <span class="pop-letter">A</span>
+                            <span class="pop-letter">R</span>
+                            <span class="pop-letter">R</span>
+                            <span class="pop-letter">I</span>
+                            <span class="pop-letter">O</span>
+                            <span class="pop-letter pop-r-end">R</span>
+                        </div>
+                        <div class="pop-word">
+                            <span class="pop-letter pop-w">W</span>
+                            <span class="pop-letter">I</span>
+                            <span class="pop-letter">T</span>
+                            <span class="pop-letter">H</span>
+                            <span class="pop-letter">I</span>
+                            <span class="pop-letter pop-n-end">N</span>
+                        </div>
+                    </div>
                 </div>
             </a>
             <nav>
                 <ul class="nav-links" id="nl">
                     <li><a href="#hero" class="active">Home</a></li>
                     <li><a href="#story">Story</a></li>
+                    <li><a href="#kaileena">Kaileena</a></li>
                     <li><a href="#dahaka">Dahaka</a></li>
                     <li><a href="#gameplay">Gameplay</a></li>
                     <li><a href="#war-room">War Room</a></li>
@@ -1034,19 +1486,22 @@
     ================================================================ -->
     <section class="hero" id="hero">
         <div class="hero-bg">
-            <img src="Prince of Persia_ Warrior Within.jpg" alt="Prince of Persia Warrior Within — Fortress Corridor" />
+            <img src="Prince of Persia_ Warrior Within.jpg" alt="Fortress Corridor" />
         </div>
         <div class="hero-overlay"></div>
+        <div class="hero-character rv-right">
+            <img src="Prince of Persia_ The Two Thrones.jpg" alt="The Prince on Throne" />
+        </div>
         <div class="hero-content">
-            <img class="hero-logo-img rv" src="Prince of Persia WW Logo.jpg" alt="Warrior Within Symbol" />
-            <h1 class="hero-title rv rv-d1">
-                <span class="line1">Prince of Persia</span>
-                <span class="line2">Warrior Within</span>
-            </h1>
-            <p class="hero-desc rv rv-d2">
-                Hunted by the Dahaka. Consumed by rage. The Prince journeys to the Island of Time to defy his fate — or be devoured by it.
-            </p>
-            <div class="hero-actions rv rv-d3">
+            <div class="section-divider rv rv-d1" style="margin-bottom: 20px;"></div>
+            <div class="hero-lore-eyebrow rv rv-d1">The Hour of Destiny</div>
+            <h2 class="hero-lore-title rv rv-d1">Defy Your Fate</h2>
+            <div class="hero-lore-story rv rv-d2">
+                <p class="lore-p">Seven years have passed since the Sands of Time were unleashed, and the Prince is hunted by the <strong>Dahaka</strong> — the unstoppable guardian of the Timeline.</p>
+                <p class="lore-p">Fleeing to the dark <strong>Island of Time</strong>, he must navigate ancient chambers, conquer deadly traps, and face the <strong>Empress of Time</strong> to change his fate.</p>
+                <p class="lore-p" style="font-style: italic; color: var(--gold); margin-top: 15px;">"No man can change his fate... But the sands will run red before I yield."</p>
+            </div>
+            <div class="hero-actions rv rv-d3" style="margin-top: 30px;">
                 <a href="#enlist" class="btn-blood">⚔️ Join the Vanguard</a>
                 <a href="#gameplay" class="btn-ghost">▶ Watch Gameplay</a>
             </div>
@@ -1075,6 +1530,55 @@
     </section>
 
     <!-- ================================================================
+       KAILEENA — Empress of Time Split Section
+    ================================================================ -->
+    <section class="kaileena-section" id="kaileena">
+        <div class="kai-img-wrap rv-clip">
+            <img src="Empress of time.jpg" alt="Kaileena — Empress of Time" />
+        </div>
+        <div class="kai-text">
+            <div class="section-divider rv"></div>
+            <span class="kai-tag rv rv-d1">Empress of Time</span>
+            <h2 class="section-title rv rv-d2">Kaileena</h2>
+            <p class="rv rv-d3">She is the <strong>creator of the Sands of Time</strong> — the very artifact that cursed the Prince. Beautiful, lethal, and ancient beyond measure.</p>
+            <p class="rv rv-d4">Is she the Prince's greatest enemy… or his <strong>only salvation</strong>? The answer lies at the end of time itself.</p>
+            <div class="quote-block rv rv-d5">"Your journey will end here, Prince."</div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+       PRINCE ACTION — Full-bleed with dual swords
+    ================================================================ -->
+    <section class="prince-action">
+        <div class="prince-action-bg rv-clip">
+            <img src="Prince of Persia (1).jpg" alt="Prince Dual Swords" />
+        </div>
+        <div class="prince-action-ov"></div>
+        <div class="prince-action-content">
+            <div class="section-divider rv"></div>
+            <div class="section-eyebrow rv rv-d1">Dual Blades Warrior</div>
+            <h2 class="section-title rv rv-d2">Born to Fight</h2>
+            <p class="rv rv-d3" style="color:var(--text-dim);line-height:1.9;margin-bottom:10px;max-width:380px;">Armed with <strong style="color:var(--crimson-glow)">60+ weapons</strong>, the Prince is a relentless killing machine. Dual-wielding blades, axes, and swords — every enemy is a dance of death.</p>
+        </div>
+        <div class="accent-float rv-tilt rv-d2">
+            <img src="424886546089240066.jpg" alt="Prince in the Rain" />
+        </div>
+    </section>
+
+    <!-- ================================================================
+       PANORAMIC STRIP — Fortress overview
+    ================================================================ -->
+    <div class="pano-strip rv-clip">
+        <img src="Prince Of Persia Warrior Within Artwork 58 Check….jpg" alt="Fortress of Time" />
+        <div class="pano-overlay">
+            <div class="pano-text">
+                <h3 class="rv">The Fortress of Time</h3>
+                <p class="rv rv-d1">Ancient halls where time was born — and where the Prince will meet his destiny.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
        DAHAKA — Full-width cinematic parallax with Dahaka art
     ================================================================ -->
     <section class="dahaka-section" id="dahaka">
@@ -1088,6 +1592,32 @@
             <p class="rv rv-d2" style="margin-top:12px;">You cannot outrun fate. <strong>But you can try.</strong></p>
         </div>
     </section>
+
+    <!-- ================================================================
+       ISLAND PANORAMIC — Wide shot
+    ================================================================ -->
+    <div class="pano-strip rv-clip">
+        <img src="download (1).jpg" alt="Island of Time" style="object-position:center 30%" />
+        <div class="pano-overlay">
+            <div class="pano-text">
+                <h3 class="rv">Island of Time</h3>
+                <p class="rv rv-d1">Where time bends and reality shatters. The final battleground.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+       OVERLOOKING CITY — Prince panoramic
+    ================================================================ -->
+    <div class="pano-strip rv-clip">
+        <img src="Prince of Persia (2).jpg" alt="Kingdom" style="height:400px;" />
+        <div class="pano-overlay">
+            <div class="pano-text">
+                <h3 class="rv">Before the Darkness</h3>
+                <p class="rv rv-d1">A forgotten kingdom. A prince lost to rage. The past cannot be undone.</p>
+            </div>
+        </div>
+    </div>
 
     <!-- ================================================================
        DAHAKA CHASE VIDEO — Full-width immersive
@@ -1220,8 +1750,33 @@
        FOOTER
     ================================================================ -->
     <footer class="site-footer">
-        <div class="footer-logo">Prince of Persia: Warrior Within</div>
-        <p class="footer-text">A fan tribute to Ubisoft's darkest masterpiece.</p>
+        <div class="footer-logo-custom">
+            <div class="logo-text-ww" style="align-items: center; margin-left: 0;">
+                <div class="pop-sub">
+                    <span class="pop-sub-letter-p">P</span>rince <span style="margin: 0 4px; text-transform: lowercase; font-style: italic; font-size: 0.85em; opacity: 0.85;">of</span> <span class="pop-sub-letter-p">P</span>ersia
+                </div>
+                <div class="pop-main" style="font-size: 1.5rem; gap: 10px;">
+                    <div class="pop-word">
+                        <span class="pop-letter pop-w">W</span>
+                        <span class="pop-letter">A</span>
+                        <span class="pop-letter">R</span>
+                        <span class="pop-letter">R</span>
+                        <span class="pop-letter">I</span>
+                        <span class="pop-letter">O</span>
+                        <span class="pop-letter pop-r-end">R</span>
+                    </div>
+                    <div class="pop-word">
+                        <span class="pop-letter pop-w">W</span>
+                        <span class="pop-letter">I</span>
+                        <span class="pop-letter">T</span>
+                        <span class="pop-letter">H</span>
+                        <span class="pop-letter">I</span>
+                        <span class="pop-letter pop-n-end">N</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="footer-text" style="margin-top: 8px;">Prince of Persia · A fan tribute to Ubisoft's darkest masterpiece.</p>
         <p class="footer-tech">Built with <strong>HTML</strong> · <strong>CSS Grid & Flexbox</strong> · <strong>JavaScript</strong> · <strong>Three.js</strong></p>
     </footer>
 
@@ -1368,10 +1923,23 @@
     //  SCROLL REVEAL (IntersectionObserver)
     // ================================================================
     const obs = new IntersectionObserver((entries) => {
-        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
-    }, { threshold:0.08, rootMargin:'0px 0px -30px 0px' });
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                // Keep hero elements hidden until preloader has finished
+                if (e.target.closest('#hero') && !document.getElementById('preloader').classList.contains('loaded')) {
+                    return;
+                }
+                e.target.classList.add('vis');
+            } else {
+                // Only remove visibility if the element goes below the viewport (scrolling up)
+                if (e.target.getBoundingClientRect().top > window.innerHeight) {
+                    e.target.classList.remove('vis');
+                }
+            }
+        });
+    }, { threshold:0.05 });
 
-    document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale').forEach(el => obs.observe(el));
+    document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale, .rv-clip, .rv-tilt').forEach(el => obs.observe(el));
 
     // ================================================================
     //  PARALLAX on Dahaka section
@@ -1536,6 +2104,21 @@
     //  UTILITY
     // ================================================================
     function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+
+    // ================================================================
+    //  PRELOADER TIMER
+    // ================================================================
+    (function() {
+        const preloader = document.getElementById('preloader');
+        if (!preloader) return;
+
+        // Display the loading video for 4.5 seconds before fading out to the main content
+        setTimeout(() => {
+            preloader.classList.add('loaded');
+            // Trigger hero animations once loader completes
+            document.querySelectorAll('#hero .rv, #hero .rv-left, #hero .rv-right, #hero .rv-scale, #hero .rv-clip, #hero .rv-tilt').forEach(el => el.classList.add('vis'));
+        }, 4500);
+    })();
     </script>
 </body>
 </html>

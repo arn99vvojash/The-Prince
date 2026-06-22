@@ -1623,8 +1623,8 @@
        DAHAKA CHASE VIDEO — Full-width immersive
     ================================================================ -->
     <section class="dahaka-vid-section rv-scale" id="dahaka-vid">
-        <video autoplay muted loop playsinline>
-            <source src="pop_dahaka_chase.mp4" type="video/mp4" />
+        <video class="lazy-video" muted loop playsinline data-src="pop_dahaka_chase.mp4">
+            Your browser does not support video.
         </video>
         <div class="dahaka-vid-overlay"></div>
         <div class="dahaka-vid-text">
@@ -2126,6 +2126,33 @@
     //  UTILITY
     // ================================================================
     function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+
+    // ================================================================
+    //  LAZY LOAD & AUTO PAUSE HEAVY VIDEOS
+    // ================================================================
+    (function() {
+        const lazyVideoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                if (entry.isIntersecting) {
+                    if (!video.src) {
+                        const dataSrc = video.getAttribute('data-src');
+                        if (dataSrc) {
+                            video.src = dataSrc;
+                            video.load();
+                        }
+                    }
+                    video.play().catch(e => console.log("Play failed:", e));
+                } else {
+                    if (video.src) {
+                        video.pause();
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.lazy-video').forEach(video => lazyVideoObserver.observe(video));
+    })();
 
     // ================================================================
     //  PRELOADER TIMER
